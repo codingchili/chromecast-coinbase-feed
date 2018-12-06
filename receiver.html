@@ -40,7 +40,6 @@ limitations under the License.
         const CUSTOM_CHANNEL = 'urn:x-cast:com.google.cast.sample.helloworld';
 	const context = cast.framework.CastReceiverContext.getInstance();
 	const player = context.getPlayerManager();
-      	context.start();
 	    
 	player.addEventListener(cast.framework.events.category.CORE, event => {
 		console.log(event);
@@ -49,6 +48,8 @@ limitations under the License.
     	context.addCustomMessageListener(CUSTOM_CHANNEL, function(customEvent) {
   		console.log(customEvent);
 	});
+	    
+	context.start();
     </script>
   </body>
 </html>
