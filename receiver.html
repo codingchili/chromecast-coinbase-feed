@@ -41,9 +41,9 @@ limitations under the License.
 	const context = cast.framework.CastReceiverContext.getInstance();
 	const player = context.getPlayerManager();
 	    
-	player.addEventListener(cast.framework.events.category.CORE, event => {
-		console.log(event);
-    	});
+	//player.addEventListener(cast.framework.events.category.CORE, event => {
+	//	console.log(event);
+    	//});
 	    
     	context.addCustomMessageListener(CUSTOM_CHANNEL, function(customEvent) {
   		console.log(customEvent);
