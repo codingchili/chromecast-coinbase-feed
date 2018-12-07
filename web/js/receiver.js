@@ -14,7 +14,7 @@ class Receiver {
 
         this.context.addCustomMessageListener(this.namespace, (event) => {
             feed.stop(() => {
-                feed.start(12, event.data.ticker);
+                feed.start(14, event.data.ticker);
             });
         });
         this.context.start();
