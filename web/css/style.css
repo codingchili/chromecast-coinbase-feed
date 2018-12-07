@@ -1,0 +1,51 @@
+html, body {
+    font-family: courier, "courier new", monospace;
+    text-shadow: 2px 2px #00000064;
+    background-color: #212121;
+    color: #fff;
+}
+
+#items {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    color: #fff;
+}
+
+.down {
+    color: #F4511E;
+}
+
+.up {
+    color: #558B2F;
+}
+
+.time {
+    color: #C8E6C9;
+}
+
+.product {
+    color: #00B0FF;
+}
+
+.size {
+    color: #EC407A;
+}
+
+.connecting {
+    color: #EC407A;
+}
+
+.connected {
+    color: #558B2F;
+}
+
+.closed {
+    color: #F4511E;
+}
+
+.status {
+    color: #C8E6C9;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coinbase PRO - Websocket feed</title>
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sender.css">
+
+    <script src="js/sender.js"></script>
+    <script src="js/feed.js"></script>
+    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+</head>
+<body>
+
+<a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;"
+                                      src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
+                                      alt="Fork me on GitHub"></a>
+
+<div id="container">
+    <div id="content">
+        <h2>Coinbase-feed for Chromecast</h2>
+        <span id="subheading">Cast the coinbase websocket feed onto your chromecast!</span>
+
+        <div id="feed">
+            <div id="status"></div>
+            <div id="items"></div>
+        </div>
+
+        <select class="u-full-width" id="ticker" onchange="setFeed()">
+            <option value="ETH-USD" selected>ETH-USD</option>
+            <option value="ETH-EUR">ETH-EUR</option>
+            <option value="BTC-USD">BTC-USD</option>
+            <option value="BTC-EUR">BTC-EUR</option>
+        </select>
+
+        <button id="start" class="button-primary" onclick="cast()">CAST</button>
+    </div>
+</div>
+
+<div id="footer">
+    Robin Duda &copy;2018 v0.1.0
+</div>
+
+<script>
+    // start the websocket feed.
+    const buffer = 16;
+    let ticker = document.getElementById('ticker');
+    feed.start(buffer, ticker.value);
+
+    function setFeed() {
+        feed.stop(() => {
+            feed.start(buffer, ticker.value);
+            sender.onFeedChanged(ticker.value);
+        });
+    }
+
+    function cast() {
+        sender.cast(ticker.value);
+    }
+</script>
+
+</body>
+</html>

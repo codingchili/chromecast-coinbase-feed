@@ -1,0 +1,20 @@
+html {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 24px;
+}
+
+
+#status {
+    margin: 32px;
+}
+
+#items {
+    margin: 64px;
+}

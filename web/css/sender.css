@@ -1,0 +1,58 @@
+#content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 128px;
+}
+
+img {
+    display: block;
+    max-width: 860px;
+    max-height: 440px;
+    width: auto;
+    height: auto;
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+}
+
+#subheading {
+    text-align: center;
+}
+
+#feed {
+    height: 476px;
+}
+
+#status {
+    margin: 16px;
+}
+
+@media screen and (max-width: 678px) {
+    #items {
+        white-space: nowrap;
+        font-size: 12px;
+    }
+}
+
+#items {
+    margin: 24px;
+}
+
+#start {
+    margin-top: 32px;
+}
+
+#ticker {
+    color: #fff;
+    background-color: #242424;
+}
+
+#footer {
+    position: absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    text-align: center;
+}
