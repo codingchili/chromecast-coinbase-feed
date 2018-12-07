@@ -1,55 +1,188 @@
-<!--
-Copyright (C) 2014 Google Inc. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-     http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <style type="text/css">
-	  body {
-	    overflow:hidden;
-	  }
-      div{
-	    height:100%;
-	    width:100%;
-	    text-align:center;
-	    border:0px solid silver;
-	    display: table-cell;
-	    vertical-align:middle;
-	    color:#FFFFFF;
-	    background-color:#000000;
-	    font-weight:bold;
-	    font-family:Verdana, Geneva, sans-serif;
-	    font-size:40px;
-	}
+        html {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: #212121;
+        }
+
+        body {
+            margin: 0;
+            /*font-family: Verdana, Geneva, sans-serif;*/
+            font-family: courier, "courier new", monospace;
+            text-shadow: 2px 2px #00000064;
+            font-size: 24px;
+        }
+
+        #status {
+            margin: 32px;
+        }
+
+        #items {
+            margin: 64px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item {
+            color: #fff;
+        }
+
+        .down {
+            color: #F4511E;
+        }
+
+        .up {
+            color: #558B2F;
+        }
+
+        .time {
+            color: #C8E6C9;
+        }
+
+        .product {
+            color: #00B0FF;
+        }
+
+        .size {
+            color: #EC407A;
+        }
+
+        .connected {
+            color: #558B2F;
+        }
+
+        .closed {
+            color: #F4511E;
+        }
+
+        .connecting {
+            color: #EC407A;
+        }
+
+        .status {
+            color: #C8E6C9;
+        }
     </style>
-    <title>Cast Hello Text</title>
-  </head>
-  <body>
-    <div id="message">h e l l o</div>
-    <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
-    <script type="text/javascript">
-        const CUSTOM_CHANNEL = 'urn:x-cast:com.google.cast.sample.helloworld';
-	const context = cast.framework.CastReceiverContext.getInstance();
-	const player = context.getPlayerManager();
-	    
-	//player.addEventListener(cast.framework.events.category.CORE, event => {
-	//	console.log(event);
-    	//});
-	    
-    	context.addCustomMessageListener(CUSTOM_CHANNEL, function(customEvent) {
-  		console.log(customEvent);
-	});
-	    
-	context.start();
-    </script>
-  </body>
+    <title>CC</title>
+</head>
+
+<body>
+<div id="status">connecting ..</div>
+<div id="items"></div>
+
+<script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+<script type="text/javascript">
+    const CUSTOM_CHANNEL = 'urn:x-cast:com.google.cast.sample.helloworld';
+    const context = cast.framework.CastReceiverContext.getInstance();
+    const player = context.getPlayerManager();
+    const max_events = 16;
+    const events = [];
+
+    let feed = new WebSocket("wss://ws-feed.pro.coinbase.com/");
+
+    status('connecting');
+
+    feed.onopen = (e) => {
+        status('connected');
+        // sub
+        let subscribe = {
+            "type": "subscribe",
+            "product_ids": [
+                "ETH-EUR"
+            ],
+            "channels": [
+                "level2",
+                "heartbeat",
+                {
+                    "name": "ticker",
+                    "product_ids": [
+                        "ETH-BTC",
+                        "ETH-USD"
+                    ]
+                }
+            ]
+        };
+
+        feed.send(JSON.stringify(subscribe));
+    };
+
+    feed.onmessage = (e) => {
+        onUpdate(e.data);
+    };
+
+    feed.onclose = (e) => {
+        status("closed");
+        feed = new WebSocket("wss://ws-feed.pro.coinbase.com/");
+        status("reconnecting");
+    };
+
+    function onUpdate(msg) {
+        let messages = document.getElementById('items');
+
+        let update = JSON.parse(msg);
+
+        if (filter(update)) {
+
+            events.unshift(update);
+
+            if (events.length > max_events) {
+                events.pop();
+            }
+
+            let element = document.createElement('div');
+            element.classList.add("items");
+
+            element.innerHTML = `
+                <div class="item">
+                    <span class="time">${update.time}</span>
+                    <span class="product">${update.product_id}</span>
+                    <span class="size">${truncate(update.last_size)}</span> @
+                    <span class="${update.side === 'buy' ? 'up' : 'down'}">${update.price}</span>
+                </div>
+                `;
+
+            messages.insertBefore(element, messages.firstChild);
+
+            if (messages.childNodes.length > max_events) {
+                messages.removeChild(messages.lastChild);
+            }
+        }
+    }
+
+    function truncate(size) {
+        return (size + "").substring(0, 7);
+    }
+
+    function filter(update) {
+        return update.time && update.type === 'ticker' &&
+            (update.product_id === 'ETH-EUR' || update.product_id === 'ETH-USD');
+    }
+
+    function status(text) {
+        document.getElementById('status').innerHTML = `
+            <span class="status">
+                status:
+            </span>
+            <span class="${text}">
+                ${text}
+            </span>`;
+    }
+
+    player.addEventListener(cast.framework.events.category.CORE, event => {
+        console.log(event)
+    });
+
+    context.addCustomMessageListener(CUSTOM_CHANNEL, (event) => {
+        console.log(event)
+    });
+
+    context.start();
+</script>
+</body>
 </html>
