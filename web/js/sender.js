@@ -1,3 +1,6 @@
+/**
+ * Handles initiating a cast from the sender application.
+ */
 class Sender {
 
     constructor() {
@@ -7,6 +10,9 @@ class Sender {
         this.context = null;
     }
 
+    /**
+     * Initializes the cast API with some options and a listener for session changes.
+     */
     initializeCastApi() {
         this.context = cast.framework.CastContext.getInstance();
 
@@ -16,6 +22,7 @@ class Sender {
             resumeSavedSession: true
         });
 
+        // hook up a listener here so we can grab a session if one already exists.
         this.context.addEventListener(
             cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
             (event) => {
@@ -26,10 +33,17 @@ class Sender {
         );
     }
 
+    /**
+     * @param ticker instructs the receiver application to change the ticker that is subscribed to.
+     */
     onFeedChanged(ticker) {
         this.session.sendMessage(this.namespace, {"ticker": ticker});
     }
 
+    /**
+     * Starts the receiver application - creating a new session if one is not already available.
+     * @param ticker the ticker that the receiver application will subscribe to when started.
+     */
     cast(ticker) {
         this.session = this.session = this.context.getCurrentSession();
 
@@ -54,6 +68,7 @@ class Sender {
 
 const sender = new Sender();
 
+// see: https://developers.google.com/cast/docs/chrome_sender/integrate
 window['__onGCastApiAvailable'] = function (isAvailable) {
     if (isAvailable) {
         sender.initializeCastApi();

@@ -7,6 +7,11 @@ class Feed {
         this.events = [];
     }
 
+    /**
+     * Starts the feed - connecting to the websocket endpoint and subscribing to the given ticker.
+     * @param maxEvents the max number of events to display in the buffer.
+     * @param pair the ticker to show, for example ETH-EUR.
+     */
     start(maxEvents, pair) {
         this.maxEvents = maxEvents || 16;
         this.status('connecting');
@@ -47,6 +52,12 @@ class Feed {
         };
     }
 
+    /**
+     * Stops the feed - closing the websocket.
+     * @param stopped callback invoked when the socket is closed.
+     * The close operation is asynchronous - we don't really need to wait for the old socket to close first.
+     * This is just so the status messages will be shown in the correct order.
+     */
     stop(stopped) {
         if (this.socket) {
             this.onStopped = stopped;
@@ -56,13 +67,15 @@ class Feed {
         }
     }
 
+    /**
+     * Handles an update event from the websocket API.
+     * @param msg the update message from Coinbase.
+     */
     onUpdate(msg) {
         let messages = document.getElementById('items');
-
         let update = JSON.parse(msg);
 
         if (this.filter(update)) {
-
             this.events.unshift(update);
 
             if (this.events.length > this.maxEvents) {
@@ -72,6 +85,7 @@ class Feed {
             let element = document.createElement('div');
             element.classList.add("items");
 
+            // render the element using a template literal.
             element.innerHTML = `
                 <div class="item">
                     <span class="time">${update.time}</span>
@@ -81,6 +95,7 @@ class Feed {
                 </div>
                 `;
 
+            // perform DOM manipulation with insertBefore and removeChild - it's fast.
             messages.insertBefore(element, messages.firstChild);
 
             if (messages.childNodes.length > this.maxEvents) {
@@ -94,9 +109,14 @@ class Feed {
     }
 
     filter(update) {
+        // decide if the update should be shown or not - we only handler ticker updates.
         return update.time && update.type === 'ticker';
     }
 
+    /**
+     * Updates the status element.
+     * @param text representing the current status.
+     */
     status(text) {
         document.getElementById('status').innerHTML = `
             <span class="status">
