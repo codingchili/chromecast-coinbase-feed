@@ -12,6 +12,8 @@ class Receiver {
         this.context = cast.framework.CastReceiverContext.getInstance();
         this.player = this.context.getPlayerManager();
 
+        this.context.setInactivityTimeout(Number.MAX_VALUE);
+
         this.player.addEventListener(cast.framework.events.category.CORE, event => {
             console.log(event)
         });
