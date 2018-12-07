@@ -22,6 +22,13 @@ class Sender {
             resumeSavedSession: true
         });
 
+        // set up a heartbeat to avoid the receiver from shutting down.
+        setInterval(() => {
+            if (this.session) {
+                this.session.sendMessage(this.namespace, {"heartbeat": true});
+            }
+        }, 6000);
+
         // hook up a listener here so we can grab a session if one already exists.
         this.context.addEventListener(
             cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
