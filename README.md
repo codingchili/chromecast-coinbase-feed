@@ -1,8 +1,7 @@
 # coinbase vs. chromecast: The Feed
 A chromecast receiver application for displaying ticker events from the coinbase websocket feed. The sender is accessible from the web browser.
 
-The chromecast receiver is not currently published - for notes on how to set up your chromecast in developer mode see 
-[cast.google.com](https://cast.google.com/publish/#).
+The chromecast receiver is now published! [coinbasecasted.com](https://coinbasecasted.com/)
 
 ![sender application](https://raw.githubusercontent.com/codingchili/chromecast-labs/master/preview.jpg)
 
@@ -27,6 +26,11 @@ chromecast won't be fried. Also, this was a good introduction to the CAF framewo
 ### Known issues
 I think there is a parameter for the options, to set the timeout a little bit longer. Because the receiver
 will be stopped after a few minutes hehe.  :kissing_heart:
+
+### Contributing
+Issues, pull requests and code reviews are welcome.  :angel:
+
+For notes on how to set up your chromecast in developer mode see [cast.google.com](https://cast.google.com/publish/#).
 
 ### Copyright notice
 web/img/coins.png and web/img/favicon.ico is sourced from [game-icons.net](https://game-icons.net) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
