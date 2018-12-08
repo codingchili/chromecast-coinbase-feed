@@ -30,6 +30,19 @@ img {
 }
 
 @media screen and (max-width: 678px) {
+
+    #github-banner {
+        display: none;
+    }
+
+    #feed {
+        height: 300px;
+    }
+
+    #content {
+        margin-top: 32px;
+    }
+
     #items {
         white-space: nowrap;
         font-size: 11px;
@@ -37,6 +50,10 @@ img {
 
     /* hide the date on small devices to save screen estate. */
     .date {
+        display: none;
+    }
+
+    #footer {
         display: none;
     }
 }
@@ -54,12 +71,6 @@ img {
     background-color: #242424;
 }
 
-
-@media screen and (max-width: 678px) {
-    #footer {
-        display: none;
-    }
-}
 
 #footer {
     position: absolute;
