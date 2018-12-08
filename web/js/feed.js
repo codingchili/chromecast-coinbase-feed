@@ -76,6 +76,7 @@ class Feed {
         let update = JSON.parse(msg);
 
         if (this.filter(update)) {
+            update.time = new Date(Date.parse(update.time));
             this.events.unshift(update);
 
             if (this.events.length > this.maxEvents) {
@@ -88,7 +89,8 @@ class Feed {
             // render the element using a template literal.
             element.innerHTML = `
                 <div class="item">
-                    <span class="time">${update.time}</span>
+                    <span class="date">${update.time.toLocaleDateString()}</span>
+                    <span class="time">${update.time.toLocaleTimeString()}</span>
                     <span class="product">${update.product_id}</span>
                     <span class="size">${this.truncate(update.last_size)}</span> @
                     <span class="${update.side === 'buy' ? 'up' : 'down'}">${update.price}</span>

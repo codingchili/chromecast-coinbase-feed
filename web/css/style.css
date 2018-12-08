@@ -22,6 +22,11 @@ html, body {
     color: #558B2F;
 }
 
+.date {
+    color: #C8E6C9;
+    opacity: 0.7;
+}
+
 .time {
     color: #C8E6C9;
 }

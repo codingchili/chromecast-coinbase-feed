@@ -32,7 +32,12 @@ img {
 @media screen and (max-width: 678px) {
     #items {
         white-space: nowrap;
-        font-size: 12px;
+        font-size: 11px;
+    }
+
+    /* hide the date on small devices to save screen estate. */
+    .date {
+        display: none;
     }
 }
 
@@ -47,6 +52,13 @@ img {
 #ticker {
     color: #fff;
     background-color: #242424;
+}
+
+
+@media screen and (max-width: 678px) {
+    #footer {
+        display: none;
+    }
 }
 
 #footer {
