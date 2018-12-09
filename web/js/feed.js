@@ -1,3 +1,21 @@
+const version = "v0.1.0";
+
+/**
+ * Custom element to simplify base page.
+ */
+class FeedElement extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+            <div id="feed-header">
+                <div id="status"></div>
+                <div id="version">${version}</div>
+            </div>
+            <div id="items"></div>`;
+    }
+}
+customElements.define('feed-view', FeedElement);
+
+
 /**
  * Handles the coinbase event stream over websocket.
  */
@@ -5,7 +23,6 @@ class Feed {
 
     constructor() {
         this.events = [];
-        this.version = "v0.1.0";
     }
 
     /**
@@ -15,17 +32,6 @@ class Feed {
      */
     start(maxEvents, callback) {
         this.maxEvents = maxEvents || 16;
-
-        let element = document.createElement('div');
-
-        element.innerHTML = `
-            <div id="feed-header">
-                <div id="status"></div>
-                <div id="version">${this.version}</div>
-            </div>
-            <div id="items"></div>`;
-
-        document.getElementById('feed').appendChild(element);
 
         this.status('connecting');
         this.socket = new WebSocket("wss://ws-feed.pro.coinbase.com/");
