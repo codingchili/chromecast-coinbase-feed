@@ -5,6 +5,11 @@ html, body {
     color: #fff;
 }
 
+#feed-header {
+    display: flex;
+    justify-content: space-between;
+}
+
 #items {
     display: flex;
     flex-direction: column;
@@ -54,4 +59,13 @@ html, body {
 
 .status {
     color: #C8E6C9;
+}
+
+#status {
+    margin: 16px;
+}
+
+#version {
+    color: #C8E6C9;
+    margin: 16px;
 }

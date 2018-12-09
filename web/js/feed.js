@@ -5,6 +5,7 @@ class Feed {
 
     constructor() {
         this.events = [];
+        this.version = "v0.1.0";
     }
 
     /**
@@ -14,8 +15,19 @@ class Feed {
      */
     start(maxEvents, callback) {
         this.maxEvents = maxEvents || 16;
-        this.status('connecting');
 
+        let element = document.createElement('div');
+
+        element.innerHTML = `
+            <div id="feed-header">
+                <div id="status"></div>
+                <div id="version">${this.version}</div>
+            </div>
+            <div id="items"></div>`;
+
+        document.getElementById('feed').appendChild(element);
+
+        this.status('connecting');
         this.socket = new WebSocket("wss://ws-feed.pro.coinbase.com/");
 
         this.socket.onopen = (e) => {
@@ -133,7 +145,7 @@ class Feed {
     filter(update) {
         // decide if the update should be shown or not - we only handler ticker updates.
         update.time = update.time || new Date().toISOString();
-        update.last_size = update.last_size || 0;
+        update.last_size = update.last_size || 0.0;
 
         return update.type === 'ticker';
     }

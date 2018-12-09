@@ -25,10 +25,6 @@ img {
     height: 476px;
 }
 
-#status {
-    margin: 16px;
-}
-
 @media screen and (max-width: 678px) {
 
     #github-banner {
