@@ -105,7 +105,6 @@ class Feed {
             }
 
             let element = document.createElement('div');
-            element.classList.add("items");
 
             // render the element using a template literal.
             element.innerHTML = `
