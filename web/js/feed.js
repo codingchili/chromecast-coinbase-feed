@@ -10,9 +10,9 @@ class Feed {
     /**
      * Starts the feed - connecting to the websocket endpoint and subscribing to the given ticker.
      * @param maxEvents the max number of events to display in the buffer.
-     * @param pair the ticker to show, for example ETH-EUR.
+     * @param callback called when started.
      */
-    start(maxEvents, pair) {
+    start(maxEvents, callback) {
         this.maxEvents = maxEvents || 16;
         this.status('connecting');
 
@@ -20,24 +20,7 @@ class Feed {
 
         this.socket.onopen = (e) => {
             this.status('connected');
-            let subscribe = {
-                "type": "subscribe",
-                "product_ids": [
-                    pair
-                ],
-                "channels": [
-                    "level2",
-                    "heartbeat",
-                    {
-                        "name": "ticker",
-                        "product_ids": [
-                            pair
-                        ]
-                    }
-                ]
-            };
-
-            this.socket.send(JSON.stringify(subscribe));
+            callback();
         };
 
         this.socket.onmessage = (e) => {
@@ -50,6 +33,44 @@ class Feed {
                 this.onStopped();
             }
         };
+    }
+
+    /**
+     * Subscribes to the given trading pair. Unsubscribes to any pairs already subscribed to.
+     *
+     * @param pair the pair to subscribe to.
+     */
+    subscribe(pair) {
+        if (pair !== this.pair) {
+            if (this.pair) {
+                let unsubscribe = {
+                    "type": "unsubscribe",
+                    "product_ids": [
+                        this.pair
+                    ],
+                    "channels": ["ticker", "heartbeat"]
+                };
+                this.socket.send(JSON.stringify(unsubscribe));
+            }
+
+            this.pair = pair;
+            let subscribe = {
+                "type": "subscribe",
+                "product_ids": [
+                    this.pair
+                ],
+                "channels": [
+                    "heartbeat",
+                    {
+                        "name": "ticker",
+                        "product_ids": [
+                            this.pair
+                        ]
+                    }
+                ]
+            };
+            this.socket.send(JSON.stringify(subscribe));
+        }
     }
 
     /**
@@ -112,7 +133,10 @@ class Feed {
 
     filter(update) {
         // decide if the update should be shown or not - we only handler ticker updates.
-        return update.time && update.type === 'ticker';
+        update.time = update.time || new Date().toISOString();
+        update.last_size = update.last_size || 0;
+
+        return update.type === 'ticker';
     }
 
     /**

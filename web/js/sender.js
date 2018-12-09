@@ -44,7 +44,9 @@ class Sender {
      * @param ticker instructs the receiver application to change the ticker that is subscribed to.
      */
     onFeedChanged(ticker) {
-        this.session.sendMessage(this.namespace, {"ticker": ticker});
+        if (this.session) {
+            this.session.sendMessage(this.namespace, {"ticker": ticker});
+        }
     }
 
     /**

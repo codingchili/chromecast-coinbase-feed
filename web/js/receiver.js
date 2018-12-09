@@ -18,14 +18,15 @@ class Receiver {
             console.log(event)
         });
 
-        this.context.addCustomMessageListener(this.namespace, (event) => {
-            if (event.data.ticker) {
-                feed.stop(() => {
-                    feed.start(14, event.data.ticker);
-                });
-            }
+        feed.start(16, () => {
+            this.context.addCustomMessageListener(this.namespace, (event) => {
+                if (event.data.ticker) {
+                    feed.subscribe(event.data.ticker);
+                }
+                console.log(event.data);
+            });
+            this.context.start();
         });
-        this.context.start();
     }
 }
 

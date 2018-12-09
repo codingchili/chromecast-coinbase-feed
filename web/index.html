@@ -9,7 +9,8 @@
     <link rel="icon" href="img/favicon.ico">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name=”description” content="A chromecast receiver for the coinbase websocket feed. Follow price movements on a TV in real time in full HD with a custom receiver application.">
+    <meta name=”description”
+          content="A chromecast receiver for the coinbase websocket feed. Follow price movements on a TV in real time in full HD with a custom receiver application.">
 
     <script src="js/sender.js"></script>
     <script src="js/feed.js"></script>
@@ -19,7 +20,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77574715-6"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-77574715-6');
@@ -29,9 +34,10 @@
 </head>
 <body>
 
-<a href="https://github.com/codingchili/chromecast-coinbase-feed"><img id="github-banner" style="position: absolute; top: 0; right: 0; border: 0;"
-                                      src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
-                                      alt="Fork me on GitHub"></a>
+<a href="https://github.com/codingchili/chromecast-coinbase-feed"><img id="github-banner"
+                                                                       style="position: absolute; top: 0; right: 0; border: 0;"
+                                                                       src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
+                                                                       alt="Fork me on GitHub"></a>
 
 <div id="container">
     <div id="content">
@@ -62,13 +68,13 @@
     // start the websocket feed.
     const buffer = 12;
     let ticker = document.getElementById('ticker');
-    feed.start(buffer, ticker.value);
+    feed.start(buffer, () => {
+        feed.subscribe(ticker.value);
+    });
 
     function setFeed() {
-        feed.stop(() => {
-            feed.start(buffer, ticker.value);
-            sender.onFeedChanged(ticker.value);
-        });
+        feed.subscribe(ticker.value);
+        sender.onFeedChanged(ticker.value);
     }
 
     function cast() {
