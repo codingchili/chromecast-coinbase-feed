@@ -3,7 +3,7 @@ A chromecast receiver application for displaying ticker events from the coinbase
 
 The chromecast receiver is now published! [coinbasecasted.com](https://coinbasecasted.com/)
 
-![sender application](https://raw.githubusercontent.com/codingchili/chromecast-labs/master/preview.jpg)
+![sender application](https://raw.githubusercontent.com/codingchili/chromecast-labs/master/preview.png)
 
 ### How it works?
 We use the CAF - chromecast application framework. Which is a successor to the cast v2 API. We have created a custom receiver application that runs
