@@ -29,12 +29,14 @@ class Sender {
             }
         }, 6000);
 
-        // hook up a listener here so we can grab a session if one already exists.
+        // hook up a listener here so we can grab a session if one already exists
+        // or if one is started using the chromecast browser button.
         this.context.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
             (event) => {
                 console.log(event);
-                if (event.sessionState === "SESSION_RESUMED") {
-                    this.session = this.context.getCurrentSession();
+                if (event.sessionState === "SESSION_RESUMED" || event.sessionState === "SESSION_STARTED") {
+                    this.session = event.session;
+                    this.onFeedChanged(document.getElementById('ticker').value);
                 }
             }
         );
@@ -45,7 +47,6 @@ class Sender {
      */
     onFeedChanged(ticker) {
         if (this.session) {
-            console.log('sending ticker event');
             this.session.sendMessage(this.namespace, {"ticker": ticker});
         }
     }
@@ -58,7 +59,6 @@ class Sender {
         this.session = this.session = this.context.getCurrentSession();
 
         if (this.session == null) {
-            console.log('session requested');
             this.context.requestSession()
                 .then(() => {
                     console.log('session init');
@@ -66,13 +66,10 @@ class Sender {
                     this.session.addMessageListener(this.namespace, (event) => {
                         console.log(event);
                     });
-
-                    this.onFeedChanged(ticker);
                 }).catch(e => {
                 console.log(e);
             });
         } else {
-            console.log('session already exists');
             this.onFeedChanged(ticker);
         }
     }
