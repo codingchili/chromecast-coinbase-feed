@@ -18,18 +18,13 @@ class Receiver {
             console.log(event)
         });
 
-        console.log('starting feed');
         feed.start(16, () => {
-            console.log('feed connected');
             this.context.addCustomMessageListener(this.namespace, (event) => {
-                console.log(event);
                 if (event.data.ticker) {
                     feed.subscribe(event.data.ticker);
                 }
             });
-            console.log('starting context');
             this.context.start(this.options);
-            console.log('context started');
         });
     }
 }

@@ -25,7 +25,11 @@ class Sender {
         // set up a heartbeat to avoid the receiver from shutting down.
         setInterval(() => {
             if (this.session) {
-                this.session.sendMessage(this.namespace, {"heartbeat": true});
+                try {
+                    this.session.sendMessage(this.namespace, {"heartbeat": true});
+                } catch (e) {
+                    // invalid parameter is thrown sometimes, not sure why.
+                }
             }
         }, 6000);
 
@@ -33,7 +37,6 @@ class Sender {
         // or if one is started using the chromecast browser button.
         this.context.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
             (event) => {
-                console.log(event);
                 if (event.sessionState === "SESSION_RESUMED" || event.sessionState === "SESSION_STARTED") {
                     this.session = event.session;
                     this.onFeedChanged(document.getElementById('ticker').value);
@@ -61,7 +64,6 @@ class Sender {
         if (this.session == null) {
             this.context.requestSession()
                 .then(() => {
-                    console.log('session init');
                     this.session = this.context.getCurrentSession();
                     this.session.addMessageListener(this.namespace, (event) => {
                         console.log(event);
