@@ -44,6 +44,7 @@ class Sender {
      */
     onFeedChanged(ticker) {
         if (this.session) {
+            console.log('sending ticker event');
             this.session.sendMessage(this.namespace, {"ticker": ticker});
         }
     }
@@ -56,8 +57,10 @@ class Sender {
         this.session = this.session = this.context.getCurrentSession();
 
         if (this.session == null) {
+            console.log('session requested');
             this.context.requestSession()
                 .then(() => {
+                    console.log('session init');
                     this.session = this.context.getCurrentSession();
                     this.session.addMessageListener(this.namespace, (event) => {
                         console.log(event);
@@ -68,6 +71,7 @@ class Sender {
                 console.log(e);
             });
         } else {
+            console.log('session already exists');
             this.onFeedChanged(ticker);
         }
     }
