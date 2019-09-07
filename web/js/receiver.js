@@ -11,14 +11,14 @@ class Receiver {
         this.namespace = "urn:x-cast:com.github.codingchili.coinbasefeed";
         this.context = cast.framework.CastReceiverContext.getInstance();
         this.player = this.context.getPlayerManager();
-
-        this.context.setInactivityTimeout(Number.MAX_VALUE);
+        this.options = new cast.framework.CastReceiverOptions();
+        this.options.maxInactivity = 3600;
 
         this.player.addEventListener(cast.framework.events.category.CORE, event => {
             console.log(event)
         });
 
-        this.context.start();
+        this.context.start(this.options);
 
         feed.start(16, () => {
             this.context.addCustomMessageListener(this.namespace, (event) => {
