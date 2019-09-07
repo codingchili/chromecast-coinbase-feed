@@ -18,8 +18,6 @@ class Receiver {
             console.log(event)
         });
 
-        this.context.start(this.options);
-
         feed.start(16, () => {
             this.context.addCustomMessageListener(this.namespace, (event) => {
                 console.log(event);
@@ -27,6 +25,7 @@ class Receiver {
                     feed.subscribe(event.data.ticker);
                 }
             });
+            this.context.start(this.options);
         });
     }
 }

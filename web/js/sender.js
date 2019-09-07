@@ -59,7 +59,6 @@ class Sender {
             this.context.requestSession()
                 .then(() => {
                     this.session = this.context.getCurrentSession();
-
                     this.session.addMessageListener(this.namespace, (event) => {
                         console.log(event);
                     });
