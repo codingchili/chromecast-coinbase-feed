@@ -132,7 +132,7 @@ class Feed {
                     <span class="time">${update.time.toLocaleTimeString()}</span>
                     <span class="product">${update.product_id}</span>
                     <span class="size">${this.truncate(update.last_size)}</span> @
-                    <span class="${update.side === 'buy' ? 'up' : 'down'}">${update.price}</span>
+                    <span class="${update.side === 'buy' ? 'up' : 'down'}">${parseFloat(update.price).toFixed(2)}</span>
                 </div>
                 `;
 

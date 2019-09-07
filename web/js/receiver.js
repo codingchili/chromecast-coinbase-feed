@@ -19,7 +19,6 @@ class Receiver {
         });
 
         feed.start(16, () => {
-            console.log('feed started');
             feed.subscribe('ETH-EUR');
             this.context.addCustomMessageListener(this.namespace, (event) => {
                 console.log(event);
@@ -28,7 +27,6 @@ class Receiver {
                 }
             });
             this.context.start();
-            console.log('context started');
         });
     }
 }
