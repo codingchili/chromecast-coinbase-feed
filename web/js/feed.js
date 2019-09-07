@@ -87,6 +87,7 @@ class Feed {
                     }
                 ]
             };
+            console.log('sending subscribe request for pair ' + pair);
             this.socket.send(JSON.stringify(subscribe));
         }
     }
