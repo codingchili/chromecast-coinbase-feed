@@ -18,15 +18,15 @@ class Receiver {
             console.log(event)
         });
 
+        this.context.start();
+
         feed.start(16, () => {
-            feed.subscribe('ETH-EUR');
             this.context.addCustomMessageListener(this.namespace, (event) => {
                 console.log(event);
                 if (event.data.ticker) {
                     feed.subscribe(event.data.ticker);
                 }
             });
-            this.context.start();
         });
     }
 }

@@ -30,8 +30,7 @@ class Sender {
         }, 6000);
 
         // hook up a listener here so we can grab a session if one already exists.
-        this.context.addEventListener(
-            cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+        this.context.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
             (event) => {
                 if (event.sessionState === "SESSION_RESUMED") {
                     this.session = this.context.getCurrentSession();
